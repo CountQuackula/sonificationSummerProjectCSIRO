@@ -38,7 +38,7 @@ def sonifi2(frequency, dur, amp):
     sounds = []
     
     for i in range(len(frequency)):
-        arr = numpy.array([4096 * numpy.sin(2.0 * numpy.pi * frequency[i] * x / sampleRate) for x in range(0, 5 * sampleRate)]).astype(numpy.int16)
+        arr = numpy.array([4096 * numpy.sin(2.0 * numpy.pi * frequency[i] * x / sampleRate) for x in range(0, sampleRate)]).astype(numpy.int16)
         arr2 = numpy.c_[arr, arr]
         sound = pygame.sndarray.make_sound(arr2)
         sound.set_volume(amp[i])

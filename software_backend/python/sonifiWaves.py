@@ -10,8 +10,8 @@ _copyright_ = 'CSIRO, 2023'
 
 def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
     #radioWaves is center freq in MHz, NFFT as int of amt of bands
-    #a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [1000, 200, 300, 500, 1100]
-    a, f = radioWaves(cntr, NFFT, temp)
+    a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [1000, 200, 300, 500, 1100]
+    #a, f = radioWaves(cntr, NFFT, temp)
     #above also has capability to modify lower and upper audio ranges as
     #low and high
     
