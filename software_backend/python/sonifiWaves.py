@@ -1,5 +1,5 @@
 from pyGameAudioOutput import sonifi, sonifi2
-from freqArrayMaker import radioWaves
+#from freqArrayMaker import radioWaves
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
 _copyright_ = 'CSIRO, 2023'
@@ -10,7 +10,7 @@ _copyright_ = 'CSIRO, 2023'
 
 def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
     #radioWaves is center freq in MHz, NFFT as int of amt of bands
-    a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [1000, 200, 300, 500, 1100]
+    a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [499.16, 499.58, 500, 500.42, 500.84]
     #a, f = radioWaves(cntr, NFFT, temp)
     #above also has capability to modify lower and upper audio ranges as
     #low and high
@@ -27,8 +27,8 @@ def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
         #print(i)
         
         #output the current freq info
-        print("Currently sonifying",round(f[i] / 1e6, 2),
-              "MHz as", round(f[i] / 1e6, 2),
+        print("Currently sonifying",round(f[i], 2),
+              "MHz as", round(f[i], 2),
               "Hz audio, amplitude of",
               round(a[i], 2), 
               ".")
@@ -36,9 +36,9 @@ def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
     #abstracted in fll form to freq in Hz to play, milliseconds of play
     #and amplitude in abs scale of [0, 1]
     if singlePlay:
-        sonifi(f / 1e6, dur * 1000, a)
+        sonifi(f, dur * 1000, a)
     else:
-        sonifi2(f / 1e6, dur * 1000, a)
+        sonifi2(f, dur * 1000, a)
     #above does not do any outptus apart from audio
     
     return a, f;

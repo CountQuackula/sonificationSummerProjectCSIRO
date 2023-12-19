@@ -1,5 +1,5 @@
 from sonifiWaves import runSample
-from rtlsdr import RtlSdr
+#from rtlsdr import RtlSdr
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
 _copyright_ = 'CSIRO, 2023'
@@ -10,16 +10,16 @@ NFFT = 5
 singlePlay = False
     
 # initiate an sdr object
-temp = RtlSdr()
+temp = 5
 
 # polling rate that is also band range?
-temp.rs = 2**21
-temp.rs_min = 1.024e6
-temp.rs_max = temp.rs
+#temp.rs = 2**21
+#temp.rs_min = 1.024e6
+#temp.rs_max = temp.rs
 
 # RTL-SDR dongle minimum and maximum frequency range (MHz)
-temp.min_freq = 25.0 * 1e6
-temp.max_freq = 1765.0 * 1e6
+#temp.min_freq = 25.0 * 1e6
+#temp.max_freq = 1765.0 * 1e6
 
 def userInputs():
     
@@ -78,4 +78,4 @@ def appStart():
 
 appStart()
 
-temp.close()
+#temp.close()
