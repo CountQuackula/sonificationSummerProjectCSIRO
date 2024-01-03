@@ -35,21 +35,19 @@ def sonifi2(frequency, dur, amp):
     pygame.mixer.init(sampleRate, -16, 2, 512)
     pygame.mixer.set_num_channels(len(amp))
     
-    arr = []
+    sound = []
     
-    for theta in range(0, dur * sampleRate):
-        sinT = numpy.sin(2.0 * numpy.pi * frequency[0] * theta / sampleRate)
-        cosT = numpy.cos(2.0 * numpy.pi * frequency[0] * theta / sampleRate)
-        arr.append()
-    
-    arr.astype(numpy.int16)
-    arr2 = numpy.c_[arr, arr]
-    sound = pygame.sndarray.make_sound(arr2)
-    sound.set_volume(amp[i])
+    for i in range(len(frequency)):
+        arr = numpy.array([4096 * numpy.sin(2.0 * numpy.pi * frequency[i] * x / sampleRate) for x in range(0, round(sampleRate / frequency[i]))]).astype(numpy.int16)
+        arr2 = numpy.c_[arr, arr]
+        s = pygame.sndarray.make_sound(arr2)
+        s.set_volume(amp[i])
+        sound.append(s)
     
     print(timer() - start)
-        
-    pygame.mixer.find_channel().play(sound, dur)
+    
+    for s in sound:
+        pygame.mixer.find_channel().play(s, dur ** 2)
     
     pygame.time.delay(dur)
     
