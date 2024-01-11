@@ -11,10 +11,12 @@ _copyright_ = 'CSIRO, 2023'
 #sonifi(200, 200, 1.0)
 
 async def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
+    sampleRate = 44100
+    
+    pygame.mixer.init(sampleRate, -16, 2, 512)
+
     sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
     await asyncio.sleep(1)
-
-    print("First audio generated")
 
     for i in range(2):
         if singlePlay:
@@ -26,7 +28,7 @@ async def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
         sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
             
         print("actions 1")
-        await asyncio.sleep(5.1)
+        await asyncio.sleep(dur + 0.1)
         print("loop restart")
     
     pygame.quit()

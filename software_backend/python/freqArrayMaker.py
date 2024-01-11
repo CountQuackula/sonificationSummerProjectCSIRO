@@ -28,7 +28,7 @@ def printInfo(a, f):
 
 def radioWaves(cntr, NFFT=5, temp=5, low = 0.25, high = 1.0):
     a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [499.16, 499.58, 500, 500.42, 500.84]
-    printInfo(a, f)
+    #printInfo(a, f)
     return a, f
     # print(os.path.abspath(rtlsdr.__file__))
     
