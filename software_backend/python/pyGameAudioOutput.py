@@ -55,11 +55,17 @@ async def sonifi(frequency, dur, amp):
         sound.stop()
 
 async def sonifi2(sounds, f, dur):
+    start = timer()
+
+    sampleRate = 44100
+    
+    pygame.mixer.init(sampleRate, -16, 2, 512)
+
     for s in sounds:
         pygame.mixer.find_channel().play(s, round(f * dur))
     
-    start = timer()
     print("Everything started returning control for an asyncio sleep")
     await asyncio.sleep(dur)
     print("Awoke after sleep " + str(timer() - start))
+
     pygame.quit()

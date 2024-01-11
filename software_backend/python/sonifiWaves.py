@@ -1,5 +1,6 @@
 from pyGameAudioOutput import sonifi, sonifi2, makeSounds
 import asyncio
+import pygame
 #from freqArrayMaker import radioWaves
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
@@ -11,22 +12,24 @@ _copyright_ = 'CSIRO, 2023'
 
 async def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
     sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
-
     await asyncio.sleep(1)
+
     print("First audio generated")
 
     for i in range(2):
         if singlePlay:
             sonifi(sounds, cntr, dur)
         else:
-            asyncio.ensure_future(sonifi2(sounds, cntr, dur))
-        #above does not do any outptus apart from audio
+            asyncio.ensure_future(sonifi2(sounds.result(), cntr, dur))
+        #above does not do any outputs apart from audio
 
         sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
             
         print("actions 1")
-        await asyncio.sleep(5.01)
+        await asyncio.sleep(5.1)
         print("loop restart")
+    
+    pygame.quit()
     
     return
 
