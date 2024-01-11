@@ -8,7 +8,7 @@ _author_ = 'Faisal Umar, Lawrence Toomey'
 _copyright_ = 'CSIRO, 2023'
 
 async def makeSounds(cntr, NFFT, temp):
-    start = timer()
+    #start = timer()
 
     #radioWaves is center freq in MHz, NFFT as int of amt of bands
     amp, frequency = radioWaves(cntr, NFFT, temp)
@@ -26,7 +26,7 @@ async def makeSounds(cntr, NFFT, temp):
         s.set_volume(amp[i])
         sound.append(s)
 
-    print(str(timer() - start) + " is make sounds time.")
+    #print(str(timer() - start) + " is make sounds time.")
 
     return sound
 
@@ -54,8 +54,8 @@ async def sonifi(frequency, dur, amp):
 
 async def sonifi2(sounds, f, dur):
     for i in range(len(sounds)):
-        pygame.mixer.Channel(i).play(sounds[i], round(f * dur))
+        pygame.mixer.Channel(i).play(sounds[i], round(f * dur) + f)
 
-    start = timer()
+    #start = timer()
     await asyncio.sleep(dur)
-    print("Awoke after sleep " + str(timer() - start))
+    #print("Awoke after sleep " + str(timer() - start))

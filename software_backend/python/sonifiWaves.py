@@ -16,6 +16,7 @@ async def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
     pygame.mixer.init(sampleRate, -16, 2, 512)
 
     sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
+    
     await asyncio.sleep(1)
 
     for i in range(5):
@@ -26,10 +27,9 @@ async def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
         #above does not do any outputs apart from audio
 
         sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
-            
-        print("actions 1")
-        await asyncio.sleep(dur * 1.02)
-        print("loop restart")
+
+        await asyncio.sleep(dur)
+        #print("loop restart")
     
     pygame.quit()
     

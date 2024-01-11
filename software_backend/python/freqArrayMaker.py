@@ -31,7 +31,7 @@ def radioWaves(cntr, NFFT=5, temp=5, low = 0.25, high = 1.0):
     shift = random.randrange(-250, 250)
     for i in range(len(f)):
         f[i] = f[i] + shift
-    #printInfo(a, f)
+    printInfo(a, f)
     return a, f
     # print(os.path.abspath(rtlsdr.__file__))
     
