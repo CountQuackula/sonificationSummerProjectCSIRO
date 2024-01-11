@@ -1,4 +1,5 @@
-from pyGameAudioOutput import sonifi, sonifi2
+from pyGameAudioOutput import sonifi, sonifi2, makeSounds
+import asyncio
 #from freqArrayMaker import radioWaves
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
@@ -8,40 +9,26 @@ _copyright_ = 'CSIRO, 2023'
 #sonifi(200, 200, 0.5)
 #sonifi(200, 200, 1.0)
 
-def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
-    #radioWaves is center freq in MHz, NFFT as int of amt of bands
-    a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [499.16, 499.58, 500, 500.42, 500.84]
-    #a, f = radioWaves(cntr, NFFT, temp)
-    #above also has capability to modify lower and upper audio ranges as
-    #low and high
+async def runSample(cntr = 500, dur = 1, NFFT = 5, singlePlay = True, temp = 5):
+    sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
+
+    await asyncio.sleep(1)
+    print("First audio generated")
+
+    for i in range(2):
+        if singlePlay:
+            sonifi(sounds, cntr, dur)
+        else:
+            asyncio.ensure_future(sonifi2(sounds, cntr, dur))
+        #above does not do any outptus apart from audio
+
+        sounds = asyncio.ensure_future(makeSounds(cntr, NFFT, temp))
+            
+        print("actions 1")
+        await asyncio.sleep(5.01)
+        print("loop restart")
     
-    #check valid result due to valid cntr value
-    if(len(a) == 1 and len(f) == 1 and a[0] == 0 and f[0] == 0):
-        print("Out of bounds value for frequency of the digitiser.")
-        return a, f 
-    
-    #print(a)
-    #print(f / 1e6)
-    
-    for i in range(len(f)):
-        #print(i)
-        
-        #output the current freq info
-        print("Currently sonifying",round(f[i], 2),
-              "MHz as", round(f[i], 2),
-              "Hz audio, amplitude of",
-              round(a[i], 2), 
-              ".")
-        
-    #abstracted in fll form to freq in Hz to play, milliseconds of play
-    #and amplitude in abs scale of [0, 1]
-    if singlePlay:
-        sonifi(f, dur * 1000, a)
-    else:
-        sonifi2(f, dur * 1000, a)
-    #above does not do any outptus apart from audio
-    
-    return a, f;
+    return
 
 #abstracted to user is cntr freq and duration of each tone played
 #also level of NFFTs to be done in case

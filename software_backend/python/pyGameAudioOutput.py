@@ -1,11 +1,38 @@
 import numpy
 import pygame
 from timeit import default_timer as timer
+from freqArrayMaker import radioWaves, printInfo
+import asyncio
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
 _copyright_ = 'CSIRO, 2023'
 
-def sonifi(frequency, dur, amp):
+async def makeSounds(cntr, NFFT, temp):
+    start = timer()
+
+    #radioWaves is center freq in MHz, NFFT as int of amt of bands
+    amp, frequency = radioWaves(cntr, NFFT, temp)
+    #above also has capability to modify lower and upper audio ranges as
+    #low and high
+
+    sampleRate = 44100
+    
+    pygame.mixer.init(sampleRate, -16, 2, 512)
+    
+    sound = []
+    
+    for i in range(len(frequency)):
+        arr = numpy.array([4096 * numpy.sin(2.0 * numpy.pi * frequency[i] * x / sampleRate) for x in range(0, round(sampleRate / frequency[i]))]).astype(numpy.int16)
+        arr2 = numpy.c_[arr, arr]
+        s = pygame.sndarray.make_sound(arr2)
+        s.set_volume(amp[i])
+        sound.append(s)
+
+    print(str(timer() - start) + " is make sounds time.")
+
+    return sound
+
+async def sonifi(frequency, dur, amp):
     #sample rate and others are al just values
     #the 2 in thingy is stereo sound 1 would be mono
     #freq is in Hz and dur in miliseconds which is the precision
@@ -16,6 +43,8 @@ def sonifi(frequency, dur, amp):
     
     pygame.mixer.init(sampleRate, -16, 2, 512)
     
+    #update thios function to be asynch in the sense that it sonofies 1 freq and plays it immedietly and waits
+    #to play the next one but has it generated
     for i in range(len(frequency)):
         arr = numpy.array([4096 * numpy.sin(2.0 * numpy.pi * frequency[i] * x / sampleRate) for x in range(0, sampleRate)]).astype(numpy.int16)
         arr2 = numpy.c_[arr, arr]
@@ -25,30 +54,12 @@ def sonifi(frequency, dur, amp):
         pygame.time.delay(dur)
         sound.stop()
 
-def sonifi2(frequency, dur, amp):
-    #print("Hello World!")
+async def sonifi2(sounds, f, dur):
+    for s in sounds:
+        pygame.mixer.find_channel().play(s, round(f * dur))
     
     start = timer()
-    
-    sampleRate = 44100
-    
-    pygame.mixer.init(sampleRate, -16, 2, 512)
-    pygame.mixer.set_num_channels(len(amp))
-    
-    sound = []
-    
-    for i in range(len(frequency)):
-        arr = numpy.array([4096 * numpy.sin(2.0 * numpy.pi * frequency[i] * x / sampleRate) for x in range(0, round(sampleRate / frequency[i]))]).astype(numpy.int16)
-        arr2 = numpy.c_[arr, arr]
-        s = pygame.sndarray.make_sound(arr2)
-        s.set_volume(amp[i])
-        sound.append(s)
-    
-    print(timer() - start)
-    
-    for s in sound:
-        pygame.mixer.find_channel().play(s, dur ** 2)
-    
-    pygame.time.delay(dur)
-    
+    print("Everything started returning control for an asyncio sleep")
+    await asyncio.sleep(dur)
+    print("Awoke after sleep " + str(timer() - start))
     pygame.quit()

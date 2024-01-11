@@ -1,4 +1,5 @@
 from sonifiWaves import runSample
+import asyncio
 #from rtlsdr import RtlSdr
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
@@ -26,11 +27,10 @@ def userInputs():
     while True:
         #let user know thy can exit program by entering negative number for either field
         print("If you wish to exit the program please enter a negative"+
-              "number into EITHER of the fields below")
+              "number into (any) field/s below")
         
         flag = False
         freq = "500t"
-        dur = "1t"
         
         #re prompt user till input is a number
         while not freq.isdigit() and flag == False:
@@ -44,22 +44,15 @@ def userInputs():
         
         flag = False
         
-        while not dur.isdigit() and flag == False:
-            #ask user for duration they wanna hear each wave for
-            dur = input("Enter a duration in second you'd like to hear each radio wave for: ")
-            try:
-                int(dur)
-                flag = True
-            except:
-                flag = False
-        
-        flag = False
-        
-        if(int(freq) <= 0 or int(dur) <= 0):
+        if(int(freq) <= 0):
             break
         
         #run the thing
-        runSample(int(freq), int(dur), NFFT, singlePlay, temp)
+        #loop = asyncio.get_event_loop()
+        asyncio.run(runSample(int(freq), dur, NFFT, singlePlay, temp))
+    
+    #an explicite return statement for readability but isnt actually doing anything
+    return
 
 def appStart():
     #welcome user
@@ -68,7 +61,7 @@ def appStart():
     print("By default the central frequency we will scan around starts at 500"+
           "MHz with a duration of 1 second. The following is an example.")
     
-    a, f = runSample(cntr, dur, NFFT, singlePlay, temp);
+    #a, f = runSample(cntr, dur, NFFT, singlePlay, temp);
     
     #goto a function to get user inputs and run them while user still wants to
     userInputs()

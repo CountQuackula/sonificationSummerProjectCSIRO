@@ -2,12 +2,34 @@ import sys
 import os
 import numpy as np
 from matplotlib.mlab import psd
+import asyncio
 #from timeit import default_timer as timer
 
 _author_ = 'Faisal Umar, Lawrence Toomey'
 _copyright_ = 'CSIRO, 2023'
 
+def printInfo(a, f):
+    #check valid result due to valid cntr value
+    if(len(a) == 1 and len(f) == 1 and a[0] == 0 and f[0] == 0):
+        print("Out of bounds value for frequency of the digitiser.")
+        return a, f
+    #abstracted in fll form to freq in Hz to play, milliseconds of play
+    #and amplitude in abs scale of [0, 1]
+    
+    for i in range(len(f)):
+        #print(i)
+        
+        #output the current freq info
+        print("Currently sonifying",round(f[i], 2),
+              "MHz as", round(f[i], 2),
+              "Hz audio, amplitude of",
+              round(a[i], 2), 
+              ".")
+
 def radioWaves(cntr, NFFT=5, temp=5, low = 0.25, high = 1.0):
+    a, f = [0.9, 0.4, 0.1, 0.8, 0.65], [499.16, 499.58, 500, 500.42, 500.84]
+    printInfo(a, f)
+    return a, f
     # print(os.path.abspath(rtlsdr.__file__))
     
     if(cntr * 1e6 < temp.min_freq or cntr * 1e6 > temp.max_freq):
@@ -57,6 +79,8 @@ def radioWaves(cntr, NFFT=5, temp=5, low = 0.25, high = 1.0):
     #print(x1)
     psd_scan_amps = ((high - low)/(x5 - x1)) * (psd_scan_amps - x1) + low
     
+    printInfo(psd_scan_amps, f)
+
     return psd_scan_amps, f
     
     #better plan for future is async datacollection and make 1 fft from it
