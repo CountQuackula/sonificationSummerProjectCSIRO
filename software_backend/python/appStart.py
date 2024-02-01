@@ -42,6 +42,9 @@ def isDigit(char):
     return char == '1' or char == '2' or char == '3' or char == '4' or char == '5' or char == '6' or char == '7' or char == '8' or char == '9' or char == '0'
 
 def cleanInput(freq):
+    #afuncation that truncates the start non-number characters off user input
+    #this is a fix to a bug caused by havinguser input to keyboard for exiting
+    #a lower function loop
     idx = 0;
     
     while(not freq[idx] == '-' and not isDigit(freq[idx])):
