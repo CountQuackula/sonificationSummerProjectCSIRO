@@ -8,6 +8,8 @@ import asyncio
 _author_ = 'Faisal Umar, Lawrence Toomey'
 _copyright_ = 'CSIRO, 2023'
 
+#an incompleted function that is supposed to create a live plot of the data
+#but at present causes the program to freeze and hasnt been resolved
 async def makePlot(a, f):
     plt.hist(x=f, bins=len(f), weights=a, color='skyblue', edgecolor='black')
     plt.xlabel('Values')
@@ -44,14 +46,9 @@ async def makeSounds(cntr, NFFT, temp, sampleSize = 1000):
     return sound
 
 async def sonifi(sounds, f, dur):
-    #sample rate and others are al just values
-    #the 2 in thingy is stereo sound 1 would be mono
-    #freq is in Hz and dur in miliseconds which is the precision
-    #i wanted anyway so thats cool
-    #freq is between human auditory range, dur is in milisecond int and amp
-    #is 0 to 1 inclusive floating
     start = timer()
     
+    #individual audio playback of the generated audio tones
     for i in range(len(sounds)):
         pygame.mixer.Channel(0).play(sounds[i], round(f * dur) + f)
         await asyncio.sleep(dur / len(sounds))
@@ -61,6 +58,7 @@ async def sonifi(sounds, f, dur):
 async def sonifi2(sounds, f, dur):
     start = timer()
     
+    #synthesis of the generated audio tones
     for i in range(len(sounds)):
         pygame.mixer.Channel(i).play(sounds[i], round(f * dur) + f)
 
